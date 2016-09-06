@@ -115,6 +115,7 @@ JingleSessionPC.prototype.doInitialize = function () {
     };
     this.peerconnection.onsignalingstatechange = function (event) {
         if (!(self && self.peerconnection)) return;
+		console.info(">>> signalingstatechanged",self.peerconnection.signalingState);
         if (self.peerconnection.signalingState === 'stable') {
             self.wasstable = true;
         }
@@ -128,6 +129,7 @@ JingleSessionPC.prototype.doInitialize = function () {
      */
     this.peerconnection.oniceconnectionstatechange = function (event) {
         if (!(self && self.peerconnection)) return;
+		console.info(">>> oniceconnectionstatechanged",self.peerconnection.iceConnectionState);
         var now = window.performance.now();
         self.room.connectionTimes["ice.state." +
             self.peerconnection.iceConnectionState] = now;
@@ -641,7 +643,7 @@ JingleSessionPC.prototype.addSource = function (elem) {
         });
         sdp.raw = sdp.session + sdp.media.join('');
     });
-
+	console.info("this.modifySourcesQueue.paused ", this.modifySourcesQueue.paused);
     this.modifySourcesQueue.push(function() {
         // When a source is added and if this is FF, a new channel is allocated
         // for receiving the added source. We need to diffuse the SSRC of this
@@ -723,6 +725,7 @@ JingleSessionPC.prototype.removeSource = function (elem) {
         sdp.raw = sdp.session + sdp.media.join('');
     });
 
+	console.info("this.modifySourcesQueue.paused ", this.modifySourcesQueue.paused);
     this.modifySourcesQueue.push(function() {
         // When a source is removed and if this is FF, the recvonly channel that
         // receives the remote stream is deactivated . We need to diffuse the
@@ -895,8 +898,9 @@ JingleSessionPC.prototype.addStream = function (stream, callback, errorCallback,
     if(stream || ssrcInfo)
         this.peerconnection.addStream(stream, ssrcInfo);
 
-    this.modifyingLocalStreams = true;
+    this.modifyingLocalStreams = false;
     var self = this;
+	console.info("this.modifySourcesQueue.paused ", this.modifySourcesQueue.paused);
     this.modifySourcesQueue.push(function() {
         logger.log('modify sources done');
         if(ssrcInfo) {
@@ -999,8 +1003,10 @@ JingleSessionPC.prototype.removeStream = function (stream, callback, errorCallba
     // some transformation in order to send remove-source for the muted
     // streams. That's why we aren't calling return here.
 
-    this.modifyingLocalStreams = true;
+    this.modifyingLocalStreams = false;
     var self = this;
+
+	console.info("this.modifySourcesQueue.paused ", this.modifySourcesQueue.paused);
     this.modifySourcesQueue.push(function() {
         logger.log('modify sources done');
 

@@ -598,6 +598,15 @@ function handleLocalStream(streams, resolution) {
                     videoStream.addTrack(videoTracks[j]);
                 }
             }
+        } else if(RTCBrowserType.isiOSRTC()) {
+            //TODO avoid calling getAudioTracks getVideoTracks twice
+            console.log("HandleLocalStream iOSRTC", streams, resolution);
+            if (streams && streams.audioVideo) {
+                if(streams.audioVideo.getAudioTracks().length > 0)
+                    audioStream = streams.audioVideo;
+                if(streams.audioVideo.getVideoTracks().length > 0)
+                    videoStream = streams.audioVideo;
+            }
         } else {
           // On other types of browser (e.g. Firefox) we choose (namely,
           // obtainAudioAndVideoPermissions) to call getUsermedia per device
@@ -608,20 +617,6 @@ function handleLocalStream(streams, resolution) {
         // Again, different choices on different types of browser.
         desktopStream = streams.desktopStream || streams.desktop;
     }
-
-	else if(RTCBrowserType.isiOSRTC())
-	{
-		//TODO avoid calling getAudioTracks getVideoTracks twice
-		console.log("HandleLocalStream iOSRTC", streams, resolution);
-		if (streams && streams.audioVideo)
-		{
-			if(streams.audioVideo.getAudioTracks().length > 0)
-            audioStream = streams.audioVideo;
-
-			if(streams.audioVideo.getVideoTracks().length > 0)
-            videoStream = streams.audioVideo;
-		}
-	}
 
     if (desktopStream) {
         res.push({

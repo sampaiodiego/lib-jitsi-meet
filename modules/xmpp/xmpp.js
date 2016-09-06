@@ -108,7 +108,7 @@ XMPP.prototype.initFeaturesList = function () {
         disco.addFeature('urn:xmpp:jingle:apps:rtp:video');
 
         if (RTCBrowserType.isChrome() || RTCBrowserType.isOpera()
-            || RTCBrowserType.isTemasysPluginUsed()) {
+            || RTCBrowserType.isTemasysPluginUsed() || RTCBrowserType.isiOSRTC()) {
             disco.addFeature('urn:ietf:rfc:4588');
         }
 
@@ -122,7 +122,7 @@ XMPP.prototype.initFeaturesList = function () {
         //disco.addFeature('urn:ietf:rfc:5576'); // a=ssrc
 
         // Enable Lipsync ?
-        if (this.options.enableLipSync && RTCBrowserType.isChrome()) {
+        if (this.options.enableLipSync && (RTCBrowserType.isChrome() || RTCBrowserType.isiOSRTC())) {
             logger.info("Lip-sync enabled !");
             this.connection.disco.addFeature('http://jitsi.org/meet/lipsync');
         }

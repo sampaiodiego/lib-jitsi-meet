@@ -20,7 +20,7 @@ var RTCBrowserType = {
 
     RTC_BROWSER_NWJS: "rtc_browser.nwjs",
 
-	RTC_BROWSER_IOSRTC: "rtc_browser.iosrtc",
+    RTC_BROWSER_IOSRTC: "rtc_browser.iosrtc",
 
     RTC_BROWSER_REACT_NATIVE: "rtc_browser.react-native",
 
@@ -317,7 +317,7 @@ function detectBrowser() {
         detectFirefox,
         detectIE,
         detectSafari,
-		detectiOSRTC
+        detectiOSRTC
     ];
     // Try all browser detectors
     for (var i = 0; i < detectors.length; i++) {
